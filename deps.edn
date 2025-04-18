@@ -1,0 +1,26 @@
+{:paths ["src"]
+ :deps {org.clojure/clojure       {:mvn/version "1.12.0"}
+        cheshire/cheshire         {:mvn/version "5.10.2"}}
+
+ :aliases
+ {:dev
+  {:extra-paths ["test"]
+   :extra-deps {nrepl/nrepl       {:mvn/version "LATEST"}
+                cider/cider-nrepl {:mvn/version "LATEST"}}
+   :main-opts ["-m" "nrepl.cmdline"
+               "--middleware" "[cider.nrepl/cider-middleware]"]}
+
+  :format
+  {:extra-paths ["test"]
+   :extra-deps {dev.weavejester/cljfmt {:mvn/version "0.13.0"}}
+   :main-opts  ["-m" "cljfmt.main"]}
+
+  :lint
+  {:extra-deps {clj-kondo/clj-kondo {:mvn/version "2025.02.20"}}
+   :main-opts ["-m" "clj-kondo.main" "--lint" "src" "--parallel"]}
+
+  :test
+  {:extra-paths ["test"]
+   :extra-deps  {io.github.cognitect-labs/test-runner {:git/tag "v0.5.1" :git/sha "dfb30dd"}}
+   :main-opts   ["-m" "cognitect.test-runner"]
+   :exec-fn     cognitect.test-runner.api/test}}}
