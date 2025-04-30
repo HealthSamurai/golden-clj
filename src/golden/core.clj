@@ -34,3 +34,16 @@
                   "Things only in golden (" ~golden-filename "):\n" (with-out-str (pprint/pprint a#)) "\n"
                   "Things only in actual:\n" (with-out-str (pprint/pprint b#)) "\n"
                   "Things in both:\n" (with-out-str (pprint/pprint both#))))))))
+
+(defmacro as-jsons [golden-filenames content-gen]
+  (let [actual-content-var (gensym 'actual-content)]
+    `(let [~actual-content-var ~content-gen]
+       (is (= (count ~actual-content-var)
+              (count ~golden-filenames))
+           (str "Golden assertion error: number of files mismatch. "
+                "Expected " (count ~golden-filenames) " files, but got "
+                (count ~actual-content-var) " files."))
+       ~@(map-indexed
+          (fn [i filename]
+            `(as-json ~filename (nth ~actual-content-var ~i)))
+          golden-filenames))))
