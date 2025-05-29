@@ -38,8 +38,8 @@
 (defmacro as-jsons [golden-filenames content-gen]
   (let [actual-content-var (gensym 'actual-content)]
     `(let [~actual-content-var ~content-gen]
-       (is (= (count ~actual-content-var)
-              (count ~golden-filenames))
+       (is (= (count ~golden-filenames)
+              (count ~actual-content-var))
            (str "Golden assertion error: number of files mismatch. "
                 "Expected " (count ~golden-filenames) " files, but got "
                 (count ~actual-content-var) " files."))
